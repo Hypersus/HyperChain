@@ -19,7 +19,10 @@ import (
 )
 
 func main(){
-	block := BLC.CreateGenesisBlock("Genesis Block")
-	block.SetHash()
-	fmt.Printf("%x\n",block.Hash)
+//	block := BLC.CreateGenesisBlock("Genesis Block")
+//	block.SetHash()
+//	fmt.Printf("%x\n",block.Hash)
+	blockchain := BLC.CreateBlockChain()
+
+	fmt.Printf("%v\n",blockchain)
 }
