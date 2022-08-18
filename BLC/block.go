@@ -19,6 +19,7 @@ import (
 	"strconv"
 	"crypto/sha256"
 	"bytes"
+	"encoding/json"
 )
 
 type Block struct {
@@ -31,6 +32,39 @@ type Block struct {
 	TimeStamp		int64
 	// hash of this Block
 	Hash			[]byte
+	//
+	Nonce			int64
+}
+
+func (block *Block) String() string {
+	//var str string
+	bytes, err := json.MarshalIndent(block,"","\t")
+	if err != nil {
+		panic("Encode struct failed")
+	}
+	return string(bytes)
+	//str += "\n"
+	//str += fmt.Sprintf("\tHeight: %d\n", block.Height)
+	//str += fmr.Sprintf("\tData: ")
+}
+
+
+func NewBlock(data string, height int64, prevBlockHash []byte) *Block{
+	block := &Block{
+		Height:			height,
+		PrevBlockHash:	prevBlockHash,
+		Data:			[]byte(data),
+		TimeStamp:		time.Now().Unix(),
+		Hash:			nil,
+		Nonce:			0,
+	}
+	
+	// set valid hash and nonce
+	pow := NewPOW(block)
+
+	hash, nonce := pow.Run()
+
+	return block
 }
 
 func (block *Block) SetHash(){
@@ -44,17 +78,6 @@ func (block *Block) SetHash(){
 	block.Hash = hash[:]
 }
 
-func NewBlock(data string, height int64, prevBlockHash []byte) *Block{
-	block := &Block{
-		Height:			height,
-		PrevBlockHash:	prevBlockHash,
-		Data:			[]byte(data),
-		TimeStamp:		time.Now().Unix(),
-		Hash:			nil,
-	}
-	
-	return block
-}
 
 func CreateGenesisBlock(data string) *Block{
 	return NewBlock(data, 1, make([]byte,32))	

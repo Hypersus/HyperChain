@@ -13,8 +13,20 @@
 
 package BLC
 
+import (
+	"fmt"
+)
+
 type BlockChain struct {
 	Blocks	[]*Block
+}
+
+func (blc *BlockChain) String() string{
+	var str string
+	for i, block := range blc.Blocks {
+		str+=fmt.Sprintf("Block %d: %v\n", i, block)
+	}
+	return str
 }
 
 func CreateBlockChain() *BlockChain {	
@@ -22,6 +34,8 @@ func CreateBlockChain() *BlockChain {
 	return &BlockChain{[]*Block{genesisBlock}}
 }
 
-func (blc *Blockchain) Add(data string) {
-	
+func (blc *BlockChain) Add(data string) {
+	prevBlock := blc.Blocks[len(blc.Blocks)-1]
+	newBlock := NewBlock(data, prevBlock.Height + 1, prevBlock.Hash)  	
+	blc.Blocks = append(blc.Blocks, newBlock)
 }

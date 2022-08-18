@@ -23,6 +23,7 @@ func main(){
 //	block.SetHash()
 //	fmt.Printf("%x\n",block.Hash)
 	blockchain := BLC.CreateBlockChain()
-
+	blockchain.Add("block2")
+	blockchain.Add("block3")
 	fmt.Printf("%v\n",blockchain)
 }
